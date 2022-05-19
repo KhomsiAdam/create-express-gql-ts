@@ -1,0 +1,9 @@
+node_modules
+build
+dist
+coverage
+bin
+tasks
+.env
+.env.example
+.lintstagedrc

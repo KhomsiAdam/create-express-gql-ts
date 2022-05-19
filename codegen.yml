@@ -1,0 +1,11 @@
+overwrite: true
+schema:
+  - 'src/config/globalTypeDefs.*'
+  - 'src/entities/**/typeDefs.*'
+generates:
+  src/generated/types.ts:
+    config:
+      contextType: ../config/context#Context
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
