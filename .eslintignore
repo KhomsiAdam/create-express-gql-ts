@@ -3,6 +3,7 @@ build
 dist
 coverage
 bin
+generated
 tasks
 .env
 .env.example
