@@ -1,6 +1,6 @@
 import { allow } from 'graphql-shield';
 
-const permission = {
+const permissions = {
   Mutation: {
     register: allow,
     login: allow,
@@ -9,4 +9,4 @@ const permission = {
   },
 };
 
-export default permission;
+export default permissions;

@@ -1,6 +1,6 @@
 import { is } from '@middlewares/rules';
 
-const permission = {
+const permissions = {
   Query: {
     getAllAdmins: is.Admin,
     getAdminById: is.Admin,
@@ -12,4 +12,4 @@ const permission = {
   },
 };
 
-export default permission;
+export default permissions;

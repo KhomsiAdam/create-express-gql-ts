@@ -1,7 +1,7 @@
 import { is } from '@middlewares/rules';
 import { or } from 'graphql-shield';
 
-const permission = {
+const permissions = {
   Query: {
     getAllUsers: is.Auth,
     getUserById: is.Auth,
@@ -13,4 +13,4 @@ const permission = {
   },
 };
 
-export default permission;
+export default permissions;
