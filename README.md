@@ -25,7 +25,7 @@ src
         ├── constants.ts
         ├── interface.ts
         ├── model.ts
-        ├── permission.ts
+        ├── permissions.ts
         ├── resolvers.ts
         ├── typeDefs.ts
         └── validation.ts
@@ -81,16 +81,37 @@ cd my-app
 code .
 ```
 
+*By default, it uses `yarn` to install dependencies.
+
+- If you prefer another package manager you can pass it as an argument, for `npm`:
+
+```bash
+npx create-express-gql-ts my-app --npm
+```
+for `pnpm`:
+
+```bash
+npx create-express-gql-ts my-app --pnpm
+```
+
 Alternatively, you can clone the repository (or download or use as a template):
 
 ```bash
 git clone https://github.com/KhomsiAdam/create-express-gql-ts.git
 ```
 
-Then open the project and run the following command in your terminal to install the required dependencies:
+Then open the project folder and install the required dependencies with your preferred package manager:
 
 ```bash
 yarn
+```
+or:
+```bash
+npm install
+```
+or:
+```bash
+pnpm install
 ```
 
 [Back to top](#table-of-contents)
@@ -103,17 +124,21 @@ Setup your environment variables. In your root directory, you will find a `.env.
 cp .env.example .env
 ```
 
-Then:
+Then run the development server with the command below (depending on your package manager of choice):
 
 ```bash
 yarn dev
 ```
+or:
+```bash
+npm run dev
+```
+or:
+```bash
+pnpm dev
+```
 
 The database should be connected and your server should be running at `http://localhost:${port}/graphql`. You can start testing and querying the API.
-
-```bash
-yarn test:good
-```
 
 [Back to top](#table-of-contents)
 
@@ -138,6 +163,8 @@ src/
 [Back to top](#table-of-contents)
 
 # Scripts
+
+*`yarn` can be replaced by `npm run` or `pnpm` depending on your preferred package manager.
 
 - Run compiled javascript production build (requires build):
 
@@ -203,7 +230,7 @@ yarn seed:users
 
 <hr>
 
-- Generate an entity based of either the default or user template (prompts for a template selection and entity name, then create it's folder under `src/entities`)
+- Generate an entity based of either the `default` or `user` template (prompts for a template selection and entity name, then create it's folder under `src/entities`)
 
 ```bash
 yarn entity
@@ -298,7 +325,7 @@ src
         ├── constants.ts
         ├── interface.ts
         ├── model.ts
-        ├── permission.ts
+        ├── permissions.ts
         ├── resolvers.ts
         ├── typeDefs.ts
         └── validation.ts
@@ -387,11 +414,7 @@ export const resolvers: Resolvers = {
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
-  # Scalars
-  scalar ObjectId
-  scalar DateTime
-
-  # Types
+# Types
   type Post {
     _id: ObjectId
     # Add your fields here #
@@ -459,13 +482,13 @@ export const typeDefs = gql`
 
 \*After generating your entity, you should complete the definitions by adding your fiels under the main type and for the create and update inputs. For each operation the type of data we could get as a result is defined using an union type.
 
-`src/entities/post/permission.ts`:
+`src/entities/post/permissions.ts`:
 
 ```typescript
 import { is } from '@middlewares/rules';
 import { or } from 'graphql-shield';
 
-const permission = {
+const permissions = {
   Query: {
     getAllPosts: is.Auth,
     getPostById: is.Auth,
@@ -478,7 +501,7 @@ const permission = {
   },
 };
 
-export default permission;
+export default permissions;
 ```
 
 \*Most operations by default have the `is.Auth` middleware that require a user to be authenticated to access them, you can either omit it if you want an operation to be public or use the `allow` rule from `graphql-shield`. You can specify which user role is allowed (`is.Admin` or `is.User`) and also use operators such as `or`, `and`.
@@ -551,6 +574,12 @@ Using:
 
 ```bash
 yarn entity
+```
+```bash
+npm run entity
+```
+```bash
+pnpm entity
 ```
 
 Let's create a `Manager` entity with the `user` template `src/entities/manager`.
@@ -651,18 +680,18 @@ export const ManagerModel = model<ManagerEntity>('Manager', ManagerSchema);
 import Joi from 'joi';
 
 export const managerSchema = Joi.object({
-  firstname: Joi.string().alphanum().trim(),
-  lastname: Joi.string().alphanum().trim(),
+  firstname: Joi.string().trim(),
+  lastname: Joi.string().trim(),
 });
 ```
 
-`src/entities/manager/permission.ts`:
+`src/entities/manager/permissions.ts`:
 
 ```typescript
 import { is } from '@middlewares/rules';
 import { or } from 'graphql-shield';
 
-const permission = {
+const permissions = {
   Query: {
     getAllManagers: is.Auth,
     getManagerById: is.Auth,
@@ -674,7 +703,7 @@ const permission = {
   },
 };
 
-export default permission;
+export default permissions;
 ```
 
 `src/entities/manager/resolvers.ts`:
@@ -780,10 +809,6 @@ export const dataloader = {
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
-  # Scalars
-  scalar ObjectId
-  scalar DateTime
-
   # Types
   type Manager {
     _id: ObjectId
