@@ -1,10 +1,6 @@
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
-  # Scalars
-  scalar ObjectId
-  scalar DateTime
-
   # Types
   type {{capitalizedName}} {
     _id: ObjectId

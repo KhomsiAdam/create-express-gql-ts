@@ -1,6 +1,10 @@
 import { gql } from 'apollo-server-core';
 
 export const globalTypeDefs = gql`
+  # Scalars
+  scalar ObjectId
+  scalar DateTime
+
   # Sorting
   ## Sort fields
   enum SortableField {
