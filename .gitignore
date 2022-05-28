@@ -1,21 +1,16 @@
 # Logs
 logs
 *.log
-
-# Build
+# Build/Dist
 build/
-
+dist/
 # Binaries
 # bin/
-
 # Tests
 coverage/
-
 # Dependencies
 node_modules/
-
 # Environment variables
 .env
-
 # VS Code
 .vscode/
