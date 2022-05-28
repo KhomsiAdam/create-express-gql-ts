@@ -63,7 +63,9 @@ export const verifyAuth = async (req: Request, role?: string, permission?: strin
       return new ForbiddenError(ErrorMessages.NOT_AUTHORIZED);
     // Check permission for operations on owned entities
     if (permission && permission === Permissions.OWN && argsId) {
-      const entityName = getEntityFromOperation(modelNames(), req.body.operationName);
+      const { query, operationName } = req.body;
+      const queryName = operationName || query.split(' ')[1];
+      const entityName = getEntityFromOperation(modelNames(), queryName);
       if (!entityName) return new CustomError(ErrorMessages.INVALID_OPERATION_NAME, StatusCode.InvalidOperationName);
       const findOwnedEntity =
         entityName && (await model(entityName).findOne({ _id: argsId, user: decoded.userId }).lean());
