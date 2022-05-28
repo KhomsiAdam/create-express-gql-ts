@@ -1,6 +1,16 @@
 #!/usr/bin/env node
-
 const { execSync } = require('child_process');
+
+const packageManagersArgs = ['--yarn', '--npm', '--pnpm'];
+
+const validatePackageManagerArg = (packageManagerArg) => {
+  if (!packageManagersArgs.includes(packageManagerArg)) {
+    console.error(`Invalid package manager argument: ${packageManagerArg}`);
+    console.log('Package managers arguments supported: --yarn, --npm, --pnpm');
+    process.exit(-1);
+  }
+  return packageManagerArg.replace('--', '');
+}
 
 const runCommand = (command) => {
   try {
@@ -12,11 +22,12 @@ const runCommand = (command) => {
   return true;
 };
 
-const repositoryName = process.argv[2];
-const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-express-gql-ts ${repositoryName}`;
-const dependencies = `cd ${repositoryName} && yarn`;
+const projectName = process.argv[2] || 'express-gql-ts';
+const packageManagerName = process.argv[3] ? validatePackageManagerArg(process.argv[3]) : 'yarn';
+const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-express-gql-ts ${projectName}`;
+const dependencies = `cd ${projectName} && ${packageManagerName} install`;
 
-console.log(`Creating new express TypeScript GraphQL project: ${repositoryName}...`);
+console.log(`Creating new Express TypeScript GraphQL project: ${projectName}...`);
 
 const checkedOut = runCommand(gitCheckout);
 if (!checkedOut) process.exit(-1);
