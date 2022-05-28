@@ -1,36 +1,43 @@
+import http from 'http';
 import express from 'express';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import depthLimit from 'graphql-depth-limit';
 import compression from 'compression';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
+import depthLimit from 'graphql-depth-limit';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { GraphQLSchema } from 'graphql';
 import { log } from '@services/logger.service';
-import { morgan, limiter } from '@middlewares';
+import { morgan } from '@middlewares';
 import { context } from './context';
 
 const port = process.env.PORT || 4000;
 
-export const initializeExpress = async (schema: GraphQLSchema) => {
+export const initializeApolloExpress = async (schema: GraphQLSchema) => {
   const app = express();
-
-  app.use(helmet());
-  app.use(bodyParser.json());
-  app.use(cookieParser());
-  app.use(morgan);
   app.use(compression());
-  app.use('/graphql', limiter);
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: process.env.NODE_ENV !== 'development',
+      contentSecurityPolicy: process.env.NODE_ENV !== 'development',
+    }),
+  );
+  app.use(cookieParser());
+  // app.use('/graphql', limiter);
   app.use(express.json({ limit: '10kb' }));
   app.use(mongoSanitize());
+  app.use(morgan);
+
+  const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
     introspection: process.env.NODE_ENV !== 'production',
     context,
     schema,
-    plugins: [responseCachePlugin()],
+    csrfPrevention: true,
+    plugins: [responseCachePlugin(), ApolloServerPluginDrainHttpServer({ httpServer })],
     validationRules: [depthLimit(7)],
     formatError: (err) => {
       if (err.message.startsWith('Database Error:')) {
@@ -39,15 +46,17 @@ export const initializeExpress = async (schema: GraphQLSchema) => {
       return err;
     },
   });
-
   await server.start();
   server.applyMiddleware({
     app,
     path: '/graphql',
-    cors: { origin: 'https://studio.apollographql.com', credentials: true },
+    cors: {
+      origin: true,
+      credentials: true,
+    },
   });
 
-  app.listen(port, async () => {
+  httpServer.listen(port, async () => {
     log.info(`Server ready at: http://localhost:${port}${server.graphqlPath}`);
   });
 };
