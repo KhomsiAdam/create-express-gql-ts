@@ -110,7 +110,7 @@ yarn
 
 *If you want to use another package manager after using this method instead of `npx`, before installing dependencies you should modify the `pre-commit` script in `.husky` to match your package manager of choice (then deleting the `yarn.lock` file if it would cause any conflicts).
 
-*In the `.github/workflows` folder, there is a workflow file for each package manager, delete the unused ones.
+*In the `.github/yml` folder, there is a workflow file for each package manager. You can copy the file that matches your package manager into `.github/workflows` and delete `.github/workflows/yarn.yml`.
 
 
 [Back to top](#table-of-contents)

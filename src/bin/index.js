@@ -31,6 +31,7 @@ const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-ex
 const installDeps = `cd ${projectName} && ${packageManagerName} install`;
 
 const githubWorkflowsPath = `${__dirname}/${projectName}/.github/workflows`;
+const githubWorkYmlPath = `${__dirname}/${projectName}/.github/yml`;
 const huskyPreCommitPath = `${__dirname}/${projectName}/.husky/pre-commit`;
 const yarnLockPath = `${__dirname}/${projectName}/yarn.lock`;
 
@@ -50,16 +51,9 @@ if (packageManagerName !== 'yarn') {
       if (writeError) return console.log(writeError);
     });
   });
-  // Remove github workflow yml files that do not match the selected package manager
-  fs.readdir(githubWorkflowsPath, (err, files) => {
-    if (err) console.log(err);
-    files.forEach(file => {
-      const fileDir = path.join(githubWorkflowsPath, file);
-      if (file !== `${packageManagerName}.yml`) {
-        fs.unlinkSync(fileDir);
-      }
-    });
-  });
+  // Remove github workflow yarn.yml file and copy the selected package manager's yml file
+  fs.unlinkSync(`${githubWorkflowsPath}/yarn.yml`);
+  fs.copyFileSync(`${githubWorkYmlPath}/${packageManagerName}.yml`, `${githubWorkflowsPath}/${packageManagerName}.yml`);
 }
 
 console.log('Installing dependencies...');
