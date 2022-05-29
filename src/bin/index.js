@@ -30,10 +30,12 @@ const packageManagerName = process.argv[3] ? validatePackageManagerArg(process.a
 const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-express-gql-ts ${projectName}`;
 const installDeps = `cd ${projectName} && ${packageManagerName} install`;
 
-const githubWorkflowsPath = `${__dirname}/${projectName}/.github/workflows`;
-const githubWorkYmlPath = `${__dirname}/${projectName}/.github/yml`;
-const huskyPreCommitPath = `${__dirname}/${projectName}/.husky/pre-commit`;
-const yarnLockPath = `${__dirname}/${projectName}/yarn.lock`;
+const currentDir = execSync('echo %cd%', { stdio: 'pipe' }).toString().trim();
+
+const githubWorkflowsPath = `${currentDir}/${projectName}/.github/workflows`;
+const githubWorkYmlPath = `${currentDir}/${projectName}/.github/yml`;
+const huskyPreCommitPath = `${currentDir}/${projectName}/.husky/pre-commit`;
+const yarnLockPath = `${currentDir}/${projectName}/yarn.lock`;
 
 console.log(`Creating new Express TypeScript GraphQL project: ${projectName}...`);
 const checkedOut = runCommand(gitCheckout);
