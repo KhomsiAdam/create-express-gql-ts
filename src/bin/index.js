@@ -28,9 +28,14 @@ const projectName = process.argv[2] || 'express-gql-ts';
 const packageManagerName = process.argv[3] ? validatePackageManagerArg(process.argv[3]) : 'yarn';
 
 const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-express-gql-ts ${projectName}`;
-const installDeps = `cd ${projectName} && ${packageManagerName} install`;
+const installDeps = packageManagerName === 'npm' ? `cd ${projectName} && ${packageManagerName} install --force` : `cd ${projectName} && ${packageManagerName} install`;
 
-const currentDir = execSync('echo %cd%', { stdio: 'pipe' }).toString().trim();
+const OS = process.platform;
+let currentDirCMD;
+if (OS === 'darwin' || OS === 'linux') currentDirCMD = 'pwd';
+if (OS === 'win32') currentDirCMD = 'chdir';
+
+const currentDir = execSync(currentDirCMD, { stdio: 'pipe' }).toString().trim();
 
 const githubWorkflowsPath = `${currentDir}/${projectName}/.github/workflows`;
 const githubWorkYmlPath = `${currentDir}/${projectName}/.github/yml`;
