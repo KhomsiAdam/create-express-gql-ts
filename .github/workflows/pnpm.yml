@@ -1,4 +1,4 @@
-name: Node.js Lint/Test/Build with pnpm
+name: Lint/Test/Build with pnpm
 
 on:
   push:

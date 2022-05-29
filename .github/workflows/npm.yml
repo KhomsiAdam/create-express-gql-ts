@@ -1,4 +1,4 @@
-name: Node.js Lint/Test/Build
+name: Lint/Test/Build with npm
 
 on:
   push:

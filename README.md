@@ -83,7 +83,9 @@ code .
 
 *By default, it uses `yarn` to install dependencies.
 
-- If you prefer another package manager you can pass it as an argument, for `npm`:
+- If you prefer another package manager you can pass it as an argument.
+
+for `npm`:
 
 ```bash
 npx create-express-gql-ts my-app --npm
@@ -100,19 +102,16 @@ Alternatively, you can clone the repository (or download or use as a template):
 git clone https://github.com/KhomsiAdam/create-express-gql-ts.git
 ```
 
-Then open the project folder and install the required dependencies with your preferred package manager:
+Then open the project folder and install the required dependencies:
 
 ```bash
 yarn
 ```
-or:
-```bash
-npm install
-```
-or:
-```bash
-pnpm install
-```
+
+*If you want to use another package manager after using this method instead of `npx`, before installing dependencies you should modify the `pre-commit` script in `.husky` to match your package manager of choice (then deleting the `yarn.lock` file if it would cause any conflicts).
+
+*In the `.github/workflows` folder, there is a workflow file for each package manager, delete the unused ones.
+
 
 [Back to top](#table-of-contents)
 
