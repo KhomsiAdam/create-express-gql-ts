@@ -83,7 +83,7 @@ code .
 
 *By default, it uses `yarn` to install dependencies.
 
-- If you prefer another package manager you can pass it as an argument.
+- If you prefer another package manager you can pass it as an argument:
 
 for `npm`:
 
@@ -94,6 +94,12 @@ for `pnpm`:
 
 ```bash
 npx create-express-gql-ts my-app --pnpm
+```
+
+*You can pass package manager specific arguments as flags as well after the package manager argument. As an example with `npm` you might need to pass in the `--force` flag to force installation even with conflicting peer dependencies:
+
+```bash
+npx create-express-gql-ts my-app --npm --force
 ```
 
 Alternatively, you can clone the repository (or download or use as a template):

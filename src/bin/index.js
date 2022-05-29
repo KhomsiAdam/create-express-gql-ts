@@ -26,9 +26,10 @@ const runCommand = (command) => {
 
 const projectName = process.argv[2] || 'express-gql-ts';
 const packageManagerName = process.argv[3] ? validatePackageManagerArg(process.argv[3]) : 'yarn';
+const arguments = process.argv[3] && process.argv[4] ? process.argv.slice(4).join(' ') : '';
 
 const gitCheckout = `git clone --depth 1 https://github.com/KhomsiAdam/create-express-gql-ts ${projectName}`;
-const installDeps = packageManagerName === 'npm' ? `cd ${projectName} && ${packageManagerName} install --force` : `cd ${projectName} && ${packageManagerName} install`;
+const installDeps = `cd ${projectName} && ${packageManagerName} install ${arguments}`;
 
 const OS = process.platform;
 let currentDirCMD;
@@ -63,6 +64,7 @@ if (packageManagerName !== 'yarn') {
   fs.copyFileSync(`${githubWorkYmlPath}/${packageManagerName}.yml`, `${githubWorkflowsPath}/${packageManagerName}.yml`);
 }
 
+console.log(`Running: ${packageManagerName} install ${arguments}`);
 console.log('Installing dependencies...');
 const installedDeps = runCommand(installDeps);
 if (!installedDeps) process.exit(-1);

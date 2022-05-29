@@ -1,6 +1,6 @@
 {
   "name": "create-express-gql-ts",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Set up and build a Node.js GraphQL API using Typescript, Express, Mongoose with a maintainable and scalable structure.",
   "main": "src/index.ts",
   "bin": "src/bin/index.js",
